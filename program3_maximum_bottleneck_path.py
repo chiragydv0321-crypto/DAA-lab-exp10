@@ -1,0 +1,28 @@
+"""
+Experiment 10: Shortest Paths
+Program 3: Maximum Bottleneck Path
+Aim: Find a path maximizing the minimum edge capacity.
+"""
+
+def max_bottleneck(capacity, source, target):
+    n = len(capacity)
+    best = [-1] * n
+    visited = [False] * n
+    best[source] = float('inf')
+    for _ in range(n):
+        u = -1
+        for i in range(n):
+            if not visited[i] and (u == -1 or best[i] > best[u]):
+                u = i
+        if u == -1 or best[u] < 0:
+            break
+        if u == target:
+            return best[u]
+        visited[u] = True
+        for v, w in enumerate(capacity[u]):
+            if w > 0:
+                best[v] = max(best[v], min(best[u], w))
+    return best[target]
+
+g = [[0, 8, 5, 0], [8, 0, 7, 6], [5, 7, 0, 9], [0, 6, 9, 0]]
+print(max_bottleneck(g, 0, 3))
